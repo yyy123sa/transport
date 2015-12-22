@@ -26,10 +26,11 @@ public class ContextConfig {
 	public SignalEmitter signalEmitter(){
 		int interval = parseIntOrDefault(env.getProperty("interval"), 1);
 		boolean liveForever = parseBooleanOrDefault(env.getProperty("live_forever"), false);
+		int emitterNum  = parseIntOrDefault(env.getProperty("emitter_num"), 20);
 		LOGGER.info(String.format("The emitter will emit signal every %d sec.", interval));
 		if(liveForever) LOGGER.info("The emitter will run continuously until killed manually");
 		
-		return new SignalEmitterImpl(liveForever, interval);
+		return new SignalEmitterImpl(liveForever, interval, emitterNum);
 		
 	}
 

@@ -3,6 +3,7 @@ package com.realtimestudio.transport.event.simulator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -53,7 +54,7 @@ public class SignalEmitterTest {
 	@Test
 	public void test() throws InterruptedException {
 		emitter.emit();
-		Thread.sleep(60*1000);
+		Thread.sleep(5*1000);
 	}
 
 }

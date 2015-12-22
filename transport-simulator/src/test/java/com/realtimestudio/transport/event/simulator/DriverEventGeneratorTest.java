@@ -17,14 +17,14 @@ public class DriverEventGeneratorTest {
 
 	@Test
 	public void mostDangerousDirverTest() {
-		Driver driver = new Driver("Winston Chen", "100001", new Date(), new Date(), 100);
+		Driver driver = new Driver("Winston Chen", "6507401234", "sdf@163.com", "23234234", "100001", new Date(), new Date(), 100);
 		DriverEventGeneratorImpl generator = new DriverEventGeneratorImpl(driver);
 		assertEquals(generator.generateEvents().size(), eventSet.size());
 	}
 	
 	@Test
 	public void safestDirverTest() {
-		Driver driver = new Driver("Winston Chen", "100001", new Date(), new Date(), 0);
+		Driver driver = new Driver("Winston Chen", "6507401234", "sdf@163.com", "23234234", "100001", new Date(), new Date(), 0);
 		DriverEventGeneratorImpl generator = new DriverEventGeneratorImpl(driver);
 		assertEquals(generator.generateEvents().size(), 0);
 	}

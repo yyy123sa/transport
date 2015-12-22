@@ -1,0 +1,18 @@
+Dec 22, 2015: (changelist: 10001)
+
+1. Add more fields to Driver and Car
+   Driver: phonenum, email, licenseNum
+   Car: color, year. carID is car license num.
+   
+2. Use 20 new routes. All routes in JSON format. Car/driver/route is one-to-one-to-one mapping.
+   Each route is using an individual thread. When one round is completed, the route is reversed and continue running.
+   
+3. Use Route class: start, end, List<Locations>, distance
+
+4. The length of carid is changed to 7 due to changing to license num.
+
+5. Add functionality to let user to change/add driver/car
+
+Future changes:
+1. add HATEOAS 
+2. change simulator to send signal to HTTP

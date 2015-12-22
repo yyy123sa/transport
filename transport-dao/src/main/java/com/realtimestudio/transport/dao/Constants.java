@@ -27,6 +27,8 @@ public class Constants {
 	
 	public static final String CAR_FAMILY = "c";
 	public static final String MODEL = "model"; 
+	public static final String COLOR = "color";
+	public static final String YEAR = "year";
 	
 	public static final String DRIVER_FAMILY = "d";
 	public static final String NAME = "name";
@@ -34,9 +36,14 @@ public class Constants {
 	public static final String DOB = "dob";
 	public static final String LICENSEDATE = "licenseDate";
 	public static final String RISKFACTOR = "riskFactor";
+	public static final String PHONENUM = "PHONENUM";
+	public static final String EMAIL = "email";
+	public static final String LICENSENUM = "licenseNum";
 	
 	public static final byte[] CAR_FAMILY_H = Bytes.toBytes(CAR_FAMILY);
 	public static final byte[] MODEL_H = Bytes.toBytes(MODEL);
+	public static final byte[] COLOR_H = Bytes.toBytes(COLOR);
+	public static final byte[] YEAR_H = Bytes.toBytes(YEAR);
 	
 	public static final byte[] DRIVER_FAMILY_H  = Bytes.toBytes(DRIVER_FAMILY);
 	public static final byte[] NAME_H  = Bytes.toBytes(NAME);
@@ -44,6 +51,9 @@ public class Constants {
 	public static final byte[] DOB_H  = Bytes.toBytes(DOB);
 	public static final byte[] LICENSEDATE_H  = Bytes.toBytes(LICENSEDATE);
 	public static final byte[] RISKFACTOR_H  = Bytes.toBytes(RISKFACTOR);
+	public static final byte[] PHONENUM_H  = Bytes.toBytes(PHONENUM);
+	public static final byte[] EMAIL_H  = Bytes.toBytes(EMAIL);
+	public static final byte[] LICENSENUM_H  = Bytes.toBytes(LICENSENUM);
 }
 	
 	

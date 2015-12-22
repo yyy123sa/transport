@@ -1,7 +1,7 @@
 name,length
 Packet_Head,1
 Packet_Type,2
-SIM_No,11
+SIM_No,7
 GPS_Time,12
 GPS_Lat,10
 GPS_Lon,11

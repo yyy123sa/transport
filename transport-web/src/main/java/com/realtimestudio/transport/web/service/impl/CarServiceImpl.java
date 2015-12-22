@@ -28,4 +28,13 @@ public class CarServiceImpl implements CarService {
 		return carDao.findById(carID);
 	}
 
+
+	@Override
+	public void updateCar(Car car) {
+		// TODO Auto-generated method stub
+		carDao.put(car.getId(), car);
+	}
+	
+	
+
 }
