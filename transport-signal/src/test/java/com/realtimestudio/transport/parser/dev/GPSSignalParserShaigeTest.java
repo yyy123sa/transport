@@ -23,7 +23,9 @@ public class GPSSignalParserShaigeTest {
 		//simid timestamp, lat, long, speed, Direction, gas, weather, presssure, status
 		//(0100001000011151103191542 +28.198180 +113.0191001091800610234.99)
 		//String str = "(0100001000011151103191542+28.198180+113.0191001091800610234.99)";
-		String str = "(01粤B77601151103191542+28.198180+113.0191001091800610234.99)";
+		//String str = "(01粤B77601151103191542+28.198180+113.0191001091800610234.99)";
+		//( 01 粤B77617 151222184930 +31.351570 +120.658680 108 001 0-1 0332.59)"
+		String str = "粤B77601|070406120010|+23.12345|+113.56789|80|240|50|2|34.49";
 		//System.out.println("粤B7".length());
 		parseNformat(str);		
 	}
@@ -36,7 +38,7 @@ public class GPSSignalParserShaigeTest {
 		//simid timestamp, lat, long, speed, Direction, gas, weather, presssure, status
 		//String str = "(0113811111111070406120010+23.123456+113.5678900802400500234.49100E)";
 		//String str = "(0100001000011151103191542+28.198180+113.0191001091800610234.99)";
-		String str = "(01粤B77601070406120010+23.123456+113.5678900802400500234.49100E)";
+		String str = "粤B77601|070406120010|+23.12345|+113.56789|80|240|50|2|34.49|100E";
 		parseNformat(str);		
 	}
 	

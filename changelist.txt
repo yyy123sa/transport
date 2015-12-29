@@ -16,3 +16,10 @@ Dec 22, 2015: (changelist: 10001)
 Future changes:
 1. add HATEOAS 
 2. change simulator to send signal to HTTP
+
+Dec 28, 2015: (changelist: 10002)
+
+1. Use pipeline (|) to separate the fields in signal
+2. create a project (transport-misc). Separate the process to load driver/car information from simulator
+3. Simulator sends the signals via HTTP instead of Kafka. Add the new project transport-httpclient
+4. add shell scripts

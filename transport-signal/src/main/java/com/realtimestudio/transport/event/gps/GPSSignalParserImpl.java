@@ -6,26 +6,22 @@ import static com.realtimestudio.transport.event.gps.GPSSignalProtocolConfig.GAS
 import static com.realtimestudio.transport.event.gps.GPSSignalProtocolConfig.GPS_LAT;
 import static com.realtimestudio.transport.event.gps.GPSSignalProtocolConfig.GPS_LON;
 import static com.realtimestudio.transport.event.gps.GPSSignalProtocolConfig.GPS_TIME;
-import static com.realtimestudio.transport.event.gps.GPSSignalProtocolConfig.PACKET_HEAD;
-import static com.realtimestudio.transport.event.gps.GPSSignalProtocolConfig.PACKET_TAIL;
-import static com.realtimestudio.transport.event.gps.GPSSignalProtocolConfig.PACKET_TYPE;
 import static com.realtimestudio.transport.event.gps.GPSSignalProtocolConfig.PRESSURE;
+import static com.realtimestudio.transport.event.gps.GPSSignalProtocolConfig.SEPERATORESCAPED;
 import static com.realtimestudio.transport.event.gps.GPSSignalProtocolConfig.SIM_NO;
 import static com.realtimestudio.transport.event.gps.GPSSignalProtocolConfig.SPEED;
-import static com.realtimestudio.transport.event.gps.GPSSignalProtocolConfig.STATUS;
 import static com.realtimestudio.transport.event.gps.GPSSignalProtocolConfig.WEATHER;
-import static com.realtimestudio.transport.event.gps.GPSSignalProtocolConfig.getSignalProtoMap;
+import static com.realtimestudio.transport.event.gps.GPSSignalProtocolConfig.getFieldDescList;
 import static com.realtimestudio.transport.utils.DateUtils.getDate;
-import static com.realtimestudio.transport.utils.StringUtils.removePadFromString;
 
 import java.text.ParseException;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.ImmutableList;
 import com.realtimestudio.transport.event.GPSSignalParser;
 import com.realtimestudio.transport.event.GPS_Event;
 import com.realtimestudio.transport.model.Direction;
@@ -39,15 +35,12 @@ public class GPSSignalParserImpl implements GPSSignalParser {
 	private String carID;
 	private RoutePoint routePoint;
 
-	private String signal;
-	private int pos;
-	private int statusLength;
+	private String[] fields;
+
 	private Set<GPS_Event> events;
 
 	public GPSSignalParserImpl(String signal) throws ParseException {
-		this.signal = signal;
-		pos = 0;
-		statusLength = 0;
+		fields = signal.split(SEPERATORESCAPED);
 		events = new HashSet<>();
 		
 		parse();
@@ -63,76 +56,55 @@ public class GPSSignalParserImpl implements GPSSignalParser {
 		Weather weather = null;
 		float pressure = 0;
 		
-		for (Map.Entry<String, Integer> entry : getSignalProtoMap().entrySet()) {
-			int len = entry.getValue();
-			String str = null;
-			String fieldName = entry.getKey();
-			if(!STATUS.equals(fieldName)){
-				str = signal.substring(pos, pos + len);
-			}
-			
-			switch (fieldName) {
-			case PACKET_HEAD:
-			case PACKET_TYPE:
-			case PACKET_TAIL:
-				pos += len;
-				break; // skip
+		ImmutableList<Field> fieldsDesc = getFieldDescList();
+		int i = 0;
+		for (i=0; i<fieldsDesc.size(); i++) {	
+			String str = fields[i];
+			switch (fieldsDesc.get(i).getName()) {
 			case SIM_NO:
-				carID = removePadFromString(str, '0', true);
-				pos += len;
+				carID = str;
 				break;
 			case GPS_TIME:
 				timestamp = getDate(str, DATEFORMAT).getTime();
-				pos += len;
 				break;
 			case GPS_LAT:
 				lat = Float.parseFloat(str);
-				pos += len;
 				break;
 			case GPS_LON:
 				lon = Float.parseFloat(str);
-				pos += len;
 				break;
 			case SPEED:
 				speed = Short.parseShort(str);
-				pos += len;
 				break;
 			case DIRECTION:
 				direction = new Direction(Short.parseShort(str));
-				pos += len;
 				break;
 			case GAS:
 				gasVol = Short.parseShort(str);
-				pos += len;
 				break;
 			case WEATHER:
 				weather = Weather.getWeather(Integer.parseInt(str));
-				pos += len;
 				break;
 			case PRESSURE:
 				pressure = Float.parseFloat(str);
-				pos += len;
 				break;					
-			case STATUS:
-				statusLength = len;
-				parseStatuses();
-				break;
 			}
 		}
 
 		routePoint = new RoutePoint(new Location(lon, lat), timestamp, speed,
 				direction, gasVol, weather, pressure, events);
+		
+		parseStatuses(i);
 
 	}
 
-	private void parseStatuses() {
-		if (statusLength == 0)
+	private void parseStatuses(int start) {
+		if (start>=fields.length)
 			return; // no status information
 
 
-		while (pos + statusLength <= signal.length()) {
-			String str = signal.substring(pos, pos + statusLength);
-			pos += statusLength;
+		for(int i=start; i<fields.length; i++) {
+			String str = fields[i];
 			GPS_Event event = GPS_Event.getStatusMap().get(str);
 			if (event == null) LOGGER.error("Not supported status signal: " + str);
 			else events.add(event);

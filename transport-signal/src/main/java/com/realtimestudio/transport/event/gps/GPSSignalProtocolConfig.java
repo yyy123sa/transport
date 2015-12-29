@@ -6,21 +6,23 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap.Builder;
 
 public class GPSSignalProtocolConfig {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(GPSSignalProtocolConfig.class);
 
-	private static Map<String, Integer> signalProtoMap;
+	private static ImmutableList<Field> fieldList;
 	
-	private final static String[] signalProtoCSVHeader = { "name", "length" };
+	private final static String[] signalProtoCSVHeader = { "name", "type" };
 	private final static String signalProtolCSVName = "GPS_Shaige_Signal_Protocol.csv";
 
 	static {
@@ -30,12 +32,15 @@ public class GPSSignalProtocolConfig {
 			List<Map<String, String>> signalRecords = getRecordsFromFile(
 					signalFileReader, signalProtoCSVHeader, true);
 			
-			Builder<String, Integer> immutableBuilder = new Builder<>();
+			List<Field> list = new ArrayList<>();
 			for (Map<String, String> record : signalRecords) {
-				immutableBuilder.put(record.get(signalProtoCSVHeader[0]),
-						Integer.parseInt(record.get(signalProtoCSVHeader[1])));
+				Field field = new Field(record.get(signalProtoCSVHeader[0]),
+						FieldType.getFieldType(record.get(signalProtoCSVHeader[1])));
+				list.add(field);
 			}
-			signalProtoMap = immutableBuilder.build();
+			ImmutableList.Builder<Field> builder = ImmutableList.builder();
+			fieldList = builder.addAll(list).build();
+			
 			LOGGER.debug("signal protocol input file is parsed");
 
 
@@ -48,6 +53,7 @@ public class GPSSignalProtocolConfig {
 		}
 
 	}
+	
 
 	public final static String PACKET_HEAD = "Packet_Head";
 	public final static String PACKET_TYPE = "Packet_Type";
@@ -65,9 +71,11 @@ public class GPSSignalProtocolConfig {
 	
 	public final static String DATEFORMAT = "yyMMddHHmmss";
 	public final static String DEFAULTPACKETTYPE = "01";
+	public final static String SEPERATOR = "|";
+	public final static String SEPERATORESCAPED="\\|";
 	
-	public static Map<String, Integer> getSignalProtoMap(){
-		return signalProtoMap;
+	public static ImmutableList<Field> getFieldDescList(){
+		return fieldList;
 	}
 	
 

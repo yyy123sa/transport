@@ -23,6 +23,9 @@ truncate 'car_driver'
 #new HBASE client API description
 https://hbase.apache.org/apidocs/org/apache/hadoop/hbase/client/package-summary.html
 
+#Load car/driver information to HBase
+#Config files: HBase.properties;  Simulator.properties; logback.xml
+
 #transport-simulator
-#config files: HBase.properties; kafka.properties; Simulator.properties; logback.xml
+#config files: HBase.properties; http.properties; Simulator.properties; logback.xml
 

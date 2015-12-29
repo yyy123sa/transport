@@ -15,7 +15,8 @@ import static com.realtimestudio.transport.event.gps.GPSSignalProtocolConfig.SIM
 import static com.realtimestudio.transport.event.gps.GPSSignalProtocolConfig.SPEED;
 import static com.realtimestudio.transport.event.gps.GPSSignalProtocolConfig.STATUS;
 import static com.realtimestudio.transport.event.gps.GPSSignalProtocolConfig.WEATHER;
-import static com.realtimestudio.transport.event.gps.GPSSignalProtocolConfig.getSignalProtoMap;
+import static com.realtimestudio.transport.event.gps.GPSSignalProtocolConfig.getFieldDescList;
+import static com.realtimestudio.transport.event.gps.GPSSignalProtocolConfig.SEPERATOR;
 import static com.realtimestudio.transport.utils.DateUtils.getDateStr;
 import static com.realtimestudio.transport.utils.StringUtils.padInteger;
 import static com.realtimestudio.transport.utils.StringUtils.padShort;
@@ -55,56 +56,53 @@ public class GPSSignalFormatterImpl implements GPSSignalFormatter {
 	}
 
 	private void buildSignal() {
-		for (Map.Entry<String, Integer> entry : getSignalProtoMap().entrySet()) {
-			int len = entry.getValue();
-			switch (entry.getKey()) {
-			case PACKET_HEAD:
-				builder.append("(");
-				break;
-			case PACKET_TYPE:
-				builder.append(DEFAULTPACKETTYPE);
-				break;
-			case PACKET_TAIL:
-				builder.append(")");
-				break; 
+		for (Field field : getFieldDescList()) {
+			switch (field.getName()) {
 			case SIM_NO:
-				builder.append(padString(carID, len, '0', true));
+				builder.append(carID);
 				break;
 			case GPS_TIME:
+				builder.append(SEPERATOR);
 				builder.append(getDateStr(new Date(point.getTimestamp()), DATEFORMAT));
 				break;
 			case GPS_LAT:
-				builder.append(padString(formatLocationPoint(point.getLocation().getLatitude()), len, '0', false));
+				builder.append(SEPERATOR);
+				builder.append(formatLocationPoint(point.getLocation().getLatitude()));
 				break;
 			case GPS_LON:
-				builder.append(padString(formatLocationPoint(point.getLocation().getLongitude()), len, '0', false));
+				builder.append(SEPERATOR);
+				builder.append(formatLocationPoint(point.getLocation().getLongitude()));
 				break;
 			case SPEED:
-				builder.append(padShort(point.getSpeed(), len, '0', true));
+				builder.append(SEPERATOR);
+				builder.append(point.getSpeed());
 				break;
 			case DIRECTION:
-				builder.append(padShort(point.getDirection().getValue(), len, '0', true));				
+				builder.append(SEPERATOR);
+				builder.append(point.getDirection().getValue());				
 				break;
 			case GAS:
-				builder.append(padShort(point.getGasVol(), len, '0', true));
+				builder.append(SEPERATOR);
+				builder.append(point.getGasVol());
 				break;
 			case WEATHER:
-				builder.append(padInteger(point.getWeather().getId(), len, '0', true));
+				builder.append(SEPERATOR);
+				builder.append(point.getWeather().getId());
 				break;
 			case PRESSURE:
-				builder.append(padString(String.format("%.2f", point.getPressure()), len, '0', false));
-				break;
-			case STATUS:
-				buildStatuses();
+				builder.append(SEPERATOR);
+				builder.append(String.format("%.2f", point.getPressure()));
 				break;
 			}
 		}
+		buildStatuses();
 
 	}
 	
 	private void buildStatuses(){
 		BiMap<GPS_Event, String> map = GPS_Event.getStatusMap().inverse();
 		for(GPS_Event event : point.getEvents()){
+			builder.append(SEPERATOR);
 			builder.append(map.get(event));
 		}		
 	}

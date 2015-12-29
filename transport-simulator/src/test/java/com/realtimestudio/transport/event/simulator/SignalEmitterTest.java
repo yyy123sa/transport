@@ -19,7 +19,7 @@ import com.realtimestudio.transport.streaming.SignalCollector;
 @SpringApplicationConfiguration(classes = App.class)
 
 public class SignalEmitterTest {
-	@Component
+	//@Component
 	private static class StdoutCollector implements SignalCollector{
 
 		@Override
@@ -38,6 +38,14 @@ public class SignalEmitterTest {
 		@Override
 		public void send(String key, String signal) {
 			System.out.println(key+":"+signal);	
+			GPSSignalParser parser=null;
+			try {
+				parser = new GPSSignalParserImpl(signal);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			System.out.println(parser.getCarID());
+			System.out.println(parser.getRoutePoint());	
 			
 		}
 
@@ -54,7 +62,6 @@ public class SignalEmitterTest {
 	@Test
 	public void test() throws InterruptedException {
 		emitter.emit();
-		Thread.sleep(5*1000);
 	}
 
 }

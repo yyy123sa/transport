@@ -8,7 +8,7 @@ public class GPSSignalProtocolConfigTest {
 
 	@Test
 	public void test() {
-		GPSSignalProtocolConfig.getSignalProtoMap();
+		System.out.println(GPSSignalProtocolConfig.getFieldDescList());
 	}
 
 }

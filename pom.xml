@@ -38,6 +38,8 @@
 			<module>transport-dao</module>
 			<module>transport-storm</module>
 			<module>transport-web</module>
+			<module>transport-misc</module>
+			<module>transport-httpclient</module>
     </modules>
   
     <repositories>
